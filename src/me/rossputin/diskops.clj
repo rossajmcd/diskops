@@ -13,8 +13,7 @@
       (.mkdirs (.getParentFile dest-file))
       (copy f dest-file))))
 
-(defn perform-shallow-copy
-  [f-seq dest]
+(defn- shallow-copy [f-seq dest]
   (doseq [f f-seq] (copy f (file dest (.getName f)))))
 
 
@@ -22,44 +21,25 @@
 ;; Disk based IO operations
 ;; =============================================================================
 
-(defn path-list
-  [p]
-  (.listFiles (file p)))
+(defn path-list [p] (.listFiles (file p)))
 
-(defn recursive-list
-  [src]
-  (remove #(.isDirectory %) (file-seq (file src))))
+(defn recursive-list [src] (remove #(.isDirectory %) (file-seq (file src))))
 
-(defn file?
-  [p]
-  (.isFile (file p)))
+(defn file? [p] (.isFile (file p)))
 
-(defn dir?
-  [p]
-  (.isDirectory (file p)))
+(defn dir? [p] (.isDirectory (file p)))
 
-(defn files-list
-  [p]
-  (filter #(file? %) (path-list p)))
+(defn files-list [p] (filter #(file? %) (path-list p)))
 
-(defn exists?
-  [p]
-  (.exists (file p)))
+(defn exists? [p] (.exists (file p)))
 
-(defn exists-dir?
-  [p]
-  (and (exists? p) (dir? p)))
+(defn exists-dir? [p] (and (exists? p) (dir? p)))
 
-(defn copy-recursive
-  [src dest]
-  (perform-copy (recursive-list src) dest))
+(defn copy-recursive [src dest] (perform-copy (recursive-list src) dest))
 
-(defn copy-file-children
-  [src dest]
-  (perform-shallow-copy (files-list src) dest))
+(defn copy-file-children [src dest] (shallow-copy (files-list src) dest))
 
-(defn delete-directory
-  [d]
+(defn delete-directory [d]
   (doseq [f (reverse (file-seq (file d)))] (delete-file f)))
 
 (defn has-ext? [file exts]
@@ -70,5 +50,4 @@
       true
       false)))
 
-(defn filter-exts [files exts]
-  (filter #(has-ext? % exts) files))
+(defn filter-exts [files exts] (filter #(has-ext? % exts) files))
