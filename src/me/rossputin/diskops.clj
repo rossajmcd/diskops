@@ -1,6 +1,6 @@
 (ns me.rossputin.diskops
   (:require [clojure.java.io :refer [copy delete-file file]])
-  (import java.io.File))
+  (:import java.io.File))
 
 ;; =============================================================================
 ;; Helper functions
@@ -20,6 +20,10 @@
 ;; =============================================================================
 ;; Disk based IO operations
 ;; =============================================================================
+
+(defn fs [] (File/separator))
+
+(defn pwd [] (. (file ".") getCanonicalPath))
 
 (defn path-list [p] (.listFiles (file p)))
 
