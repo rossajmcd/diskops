@@ -6,12 +6,12 @@
 ;; Helper functions
 ;; =============================================================================
 
-(defn perform-copy
-  [f-seq dest]
-  (doseq [f f-seq]
-    (let [dest-file (file dest f)]
+(defn- perform-copy
+  [paths dest]
+  (doseq [p paths]
+    (let [dest-file (file (str dest p))]
       (.mkdirs (.getParentFile dest-file))
-      (copy f dest-file))))
+      (copy p dest-file))))
 
 (defn- shallow-copy [f-seq dest]
   (doseq [f f-seq] (copy f (file dest (.getName f)))))
@@ -39,7 +39,11 @@
 
 (defn exists-dir? [p] (and (exists? p) (dir? p)))
 
-(defn copy-recursive [src dest] (perform-copy (recursive-list src) dest))
+(defn copy-recursive [src dest]
+  (let [parent (.getParent (file src))
+        idx (if (nil? parent) 0 (.length parent))
+        paths (map #(subs (.getPath %) idx) (recursive-list src))]
+    (perform-copy paths (str dest (fs)))))
 
 (defn copy-file-children [src dest] (shallow-copy (files-list src) dest))
 
