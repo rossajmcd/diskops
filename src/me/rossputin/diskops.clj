@@ -54,3 +54,5 @@
       false)))
 
 (defn filter-exts [files exts] (filter #(has-ext? % exts) files))
+
+(defn slurp-pun [x] (if x (slurp x) nil))
