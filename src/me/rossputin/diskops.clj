@@ -49,9 +49,7 @@
   (let [ext-pattern (clojure.string/join "|" exts)
         complete-pattern (str "^.+\\.(" ext-pattern ")$")
         exts-reg-exp (re-pattern complete-pattern)]
-    (if (re-find exts-reg-exp (.getName file))
-      true
-      false)))
+    (if (re-find exts-reg-exp (.getName file)) true false)))
 
 (defn filter-exts [files exts] (filter #(has-ext? % exts) files))
 
