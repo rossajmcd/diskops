@@ -1,5 +1,6 @@
 (ns me.rossputin.diskops
-  (:require [clojure.java.io :refer [copy delete-file file]])
+  (:require [clojure.java.io :refer [as-relative-path copy delete-file file]]
+            [clojure.string :as s])
   (:import java.io.File))
 
 ;; =============================================================================
@@ -18,15 +19,15 @@
 
 (defn pwd [] (. (file ".") getCanonicalPath))
 
-(defn path-list [p] (.listFiles (file p)))
-
-(defn recursive-list [src] (remove #(.isDirectory %) (file-seq (file src))))
-
 (defn file? [p] (.isFile (file p)))
 
 (defn dir? [p] (.isDirectory (file p)))
 
-(defn files-list [p] (filter #(file? %) (path-list p)))
+(defn paths [p] (.listFiles (file p)))
+
+(defn files [p] (filter #(file? %) (paths p)))
+
+(defn files-recursive [src] (remove #(dir? %) (file-seq (file src))))
 
 (defn exists? [p] (.exists (file p)))
 
@@ -35,18 +36,18 @@
 (defn copy-recursive [src dest]
   (let [parent (.getParent (file src))
         idx (if (nil? parent) 0 (.length parent))]
-    (doseq [f (recursive-list src)]
+    (doseq [f (files-recursive src)]
       (let [dest-file (file (str dest (fs) (subs (.getPath f) idx)))]
         (.mkdirs (.getParentFile dest-file))
         (copy f dest-file)))))
 
-(defn copy-file-children [src dest] (shallow-copy (files-list src) dest))
+(defn copy-file-children [src dest] (shallow-copy (files src) dest))
 
 (defn delete-directory [d]
   (doseq [f (reverse (file-seq (file d)))] (delete-file f)))
 
 (defn has-ext? [file exts]
-  (let [ext-pattern (clojure.string/join "|" exts)
+  (let [ext-pattern (s/join "|" exts)
         complete-pattern (str "^.+\\.(" ext-pattern ")$")
         exts-reg-exp (re-pattern complete-pattern)]
     (if (re-find exts-reg-exp (.getName file)) true false)))
@@ -54,3 +55,9 @@
 (defn filter-exts [files exts] (filter #(has-ext? % exts) files))
 
 (defn slurp-pun [x] (if x (slurp x) nil))
+
+(defn as-relative [path] (try (as-relative-path path) (catch Exception e nil)))
+
+(defn filename [f] (if f (first (s/split (.getName f) #"\.")) nil))
+
+(defn extension [f] (if f (last (s/split (.getName f) #"\.")) nil))
