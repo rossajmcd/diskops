@@ -19,9 +19,9 @@
 
 (defn pwd [] (. (file ".") getCanonicalPath))
 
-(defn file? [p] (.isFile (file p)))
+(defn file? [p] (when (.isFile (file p)) p))
 
-(defn dir? [p] (.isDirectory (file p)))
+(defn dir? [p] (when (.isDirectory (file p)) p))
 
 (defn paths [p] (.listFiles (file p)))
 
@@ -29,9 +29,9 @@
 
 (defn files-recursive [src] (remove #(dir? %) (file-seq (file src))))
 
-(defn exists? [p] (.exists (file p)))
+(defn exists? [p] (when (.exists (file p)) p))
 
-(defn exists-dir? [p] (and (exists? p) (dir? p)))
+(defn exists-dir? [p] (when (and (exists? p) (dir? p)) p))
 
 (defn copy-recursive [src dest]
   (let [parent (.getParent (file src))
@@ -50,7 +50,7 @@
   (let [ext-pattern (s/join "|" exts)
         complete-pattern (str "^.+\\.(" ext-pattern ")$")
         exts-reg-exp (re-pattern complete-pattern)]
-    (if (re-find exts-reg-exp (.getName file)) true false)))
+    (when (re-find exts-reg-exp (.getName file)) file)))
 
 (defn filter-exts [files exts] (filter #(has-ext? % exts) files))
 
