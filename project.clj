@@ -5,5 +5,4 @@
             :url "http://www.apache.org/licenses/LICENSE-2.0"}
   :min-lein-version "2.0.0"
   :dependencies [[org.clojure/clojure "1.6.0"]]
-
   :aot :all)
