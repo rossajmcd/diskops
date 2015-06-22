@@ -3,10 +3,10 @@
             [clojure.test :refer :all]
             [me.rossputin.diskops :as dsk]))
 
-(def p1 (io/file "test-data/paths/1.txt"))
-(def p2 (io/file "test-data/paths/2.edn"))
-(def p3 (io/file "test-data/paths/child/1.txt"))
-(def p4 (io/file "test-data/paths/child/2.edn"))
+(def p1 "test-data/paths/1.txt")
+(def p2 "test-data/paths/2.edn")
+(def p3 "test-data/paths/child/1.txt")
+(def p4 "test-data/paths/child/2.edn")
 
 (def f1 (io/file p1))
 (def f2 (io/file p2))
