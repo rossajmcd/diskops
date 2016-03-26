@@ -54,6 +54,10 @@
 
 (defn filter-exts [files exts] (filter #(has-ext? % exts) files))
 
+(defn delete-exts [path exts]
+  (let [fs (filter-exts (file-seq (file path)) exts)]
+    (doseq [f fs] (delete-file f))))
+
 (defn slurp-pun [x] (if x (slurp x) nil))
 
 (defn as-relative [path] (try (as-relative-path path) (catch Exception e nil)))
