@@ -4,7 +4,7 @@ Parsimoniously, recursive delete, copy and others are not in core Clojure at the
 
 ## Release information
 
-* Latest stable release is 0.5.0
+* Latest stable release is 0.6.0
 * [![Clojars Project](https://img.shields.io/clojars/v/me.rossputin/diskops.svg)](https://clojars.org/me.rossputin/diskops)
 
 
