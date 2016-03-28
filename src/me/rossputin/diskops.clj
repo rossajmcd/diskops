@@ -29,6 +29,8 @@
 
 (defn files-recursive [src] (remove #(dir? %) (file-seq (file src))))
 
+(defn directories [p] (filter #(dir? %) (paths p)))
+
 (defn exists? [p] (when (.exists (file p)) p))
 
 (defn exists-dir? [p] (when (and (exists? p) (dir? p)) p))
