@@ -46,6 +46,12 @@
 
 (defn exists-dir? [p] (when (and (exists? p) (dir? p)) p))
 
+(defn file-with-path
+  "Look in a directory structure 'data-path' for a file 'f-name' with given ext"
+  [data-path f-name ext]
+  (let [fs (file-seq (file data-path))]
+    (first (filter #(= (name %) (str f-name ext)) fs))))
+
 (defn mkdir [f] (.mkdir f))
 
 (defn mkdirs [f] (.mkdirs f))
